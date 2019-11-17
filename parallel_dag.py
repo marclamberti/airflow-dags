@@ -14,7 +14,7 @@ def process(p1):
     print(p1)
     return 'done'
 
-with DAG(dag_id='parallel_dag', schedule_interval='0 0 * * *', default_args=default_args, catchup=True) as dag:
+with DAG(dag_id='parallel_dag', schedule_interval='0 0 * * *', default_args=default_args, catchup=False) as dag:
     
     # Tasks dynamically generated 
     tasks = [BashOperator(task_id='task_{0}'.format(t), bash_command='sleep 5'.format(t)) for t in range(1, 4)]
