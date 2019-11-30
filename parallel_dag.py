@@ -22,5 +22,7 @@ with DAG(dag_id='parallel_dag', schedule_interval='0 0 * * *', default_args=defa
 
     task_5 = BashOperator(task_id='task_5', bash_command='echo "pipeline done"')
 
-    tasks >> task_4 >> task_5
+    task_6 = BashOperator(task_id='task_6', bash_command='sleep 60')
+
+    tasks >> task_4 >> task_5 >> task_6
         
