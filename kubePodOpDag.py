@@ -11,7 +11,7 @@ default_args = {
     'retries': 7,
     'retry_delay': timedelta(minutes=5),
     # KubernetesPodOperator Defaults
-    'namespace': 'default',
+    'namespace': 'airflow-workload',
     'in_cluster': True,  # if set to true, will look in the cluster, if false, looks for file
     'get_logs': True,
     'is_delete_operator_pod': True
