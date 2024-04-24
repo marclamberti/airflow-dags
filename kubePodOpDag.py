@@ -28,7 +28,7 @@ env_var = [k8s.V1EnvVar(name='FOO', value='foo'), k8s.V1EnvVar(name='BAR', value
 configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='my-configs'))]
 
 ingest_data = KubernetesPodOperator(
-            image="localhost:5001/example_app:test1",
+            image="localhost:5000/antondock:test",
             arguments=["ingest-data"],
             env_vars=env_var,
             env_from=configmaps,
@@ -40,7 +40,7 @@ ingest_data = KubernetesPodOperator(
         )
 
 load_data = KubernetesPodOperator(
-            image="localhost:5001/example_app:test1",
+            image="localhost:5000/antondock:test",
             arguments=["load-data"],
             name=f"load_data",
             task_id=f"load_data",
