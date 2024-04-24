@@ -30,8 +30,8 @@ configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='
 ingest_data = KubernetesPodOperator(
             image="localhost:5000/antondock:test",
             arguments=["ingest-data"],
-            env_vars=env_var,
-            env_from=configmaps,
+#            env_vars=env_var,
+#            env_from=configmaps,
             name=f"ingest_data",
             task_id=f"ingest_data",
             retries=5,
