@@ -29,7 +29,7 @@ configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='
 
 ingest_data = KubernetesPodOperator(
             image="antonkuiper/mdppod",
-            arguments=["ingest-data"],
+            arguments=["sqlexecutor"],
 #            env_vars=env_var,
 #            env_from=configmaps,
             name=f"start_sql",
@@ -41,7 +41,7 @@ ingest_data = KubernetesPodOperator(
 
 load_data = KubernetesPodOperator(
             image="antonkuiper/mdppod",
-            arguments=["nogeenkeer"],
+            arguments=["sqlexecutor"],
             name=f"sql_executor",
             task_id=f"sql_executor_id",
             retries=5,
