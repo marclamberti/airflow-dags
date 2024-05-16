@@ -21,7 +21,7 @@ dag = DAG('hello_KubePodOp',
           default_args=default_args,
           description='Kubernetes Pod Operator - Demonstration Dag',
           schedule_interval='0 12 * * *',
-          start_date=datetime(2017, 3, 20),
+          start_date=datetime(2023, 12, 20),
           catchup=False)
 
 env_var = [k8s.V1EnvVar(name='FOO', value='foo'), k8s.V1EnvVar(name='BAR', value='bar')]
