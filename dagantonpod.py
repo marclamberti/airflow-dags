@@ -17,7 +17,7 @@ default_args = {
     'is_delete_operator_pod': True
 }
 
-dag = DAG('dock_image_antonkuiper_mdptest',
+dag = DAG('mdpsqlexe',
           default_args=default_args,
           description='mdp test voor de sql executor  connectie naar postgres database vanuit een image die gestart wordt vanuit airflow',
           schedule_interval='0 12 * * *',
