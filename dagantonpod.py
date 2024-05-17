@@ -28,7 +28,7 @@ env_var = [k8s.V1EnvVar(name='FOO', value='foo'), k8s.V1EnvVar(name='BAR', value
 configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='my-configs'))]
 
 testdb = KubernetesPodOperator(
-            image="antonkuiper/mdptest",
+            image="antonkuiper/mdpsqlexe",
             arguments=["test"],
 #            env_vars=env_var,
 #            env_from=configmaps,
@@ -40,7 +40,7 @@ testdb = KubernetesPodOperator(
         )
 
 load_data = KubernetesPodOperator(
-            image="antonkuiper/mdptest",
+            image="antonkuiper/mdpsqlexe",
             arguments=["test2"],
             name=f"stop_sqltest",
             task_id=f"zelfde_dbconnectie_test",
