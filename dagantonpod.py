@@ -29,23 +29,23 @@ configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='
 
 testdb = KubernetesPodOperator(
             image="antonkuiper/mdpsqlexe",
-            arguments=["test"],
+#            arguments=["test"],
 #            env_vars=env_var,
 #            env_from=configmaps,
             name=f"start_sql",
             task_id=f"dbconnectietest",
-            retries=5,
-            retry_delay=timedelta(minutes=5),
+            retries=2,
+            retry_delay=timedelta(minutes=1),
             dag=dag,
         )
 
 load_data = KubernetesPodOperator(
             image="antonkuiper/mdpsqlexe",
-            arguments=["test2"],
+#            arguments=["test2"],
             name=f"stop_sqltest",
-            task_id=f"zelfde_dbconnectie_test",
-            retries=5,
-            retry_delay=timedelta(minutes=5),
+            task_id=f"nog_een_keer",
+            retries=2,
+            retry_delay=timedelta(minutes=1),
             dag=dag,
         )
 
