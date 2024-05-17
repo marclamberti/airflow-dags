@@ -29,7 +29,7 @@ configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='
 
 testdb = KubernetesPodOperator(
             image="antonkuiper/mdpsqlexe",
-            arguments=["hist_salesforce  bla1  bla2"],
+            arguments=["hist_salesforce","Bla2" ,"bla3"],
 #            env_vars=env_var,
 #            env_from=configmaps,
             name=f"start_sql",
