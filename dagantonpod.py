@@ -28,11 +28,12 @@ env_var = [k8s.V1EnvVar(name='FOO', value='foo'), k8s.V1EnvVar(name='BAR', value
 configmaps = [k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='my-configs'))]
 
 testdb = KubernetesPodOperator(
+            name=f"start_sql",
             image="antonkuiper/mdpsqlexe",
             arguments=["raw_salesforce", "contact_tv", "hist_salesforce", "contact_hist"],
 #            env_vars=env_var,
 #            env_from=configmaps,
-            name=f"start_sql",
+            
             task_id=f"dbconnectietest",
             retries=2,
             retry_delay=timedelta(minutes=1),
@@ -41,7 +42,7 @@ testdb = KubernetesPodOperator(
 
 load_data = KubernetesPodOperator(
             image="antonkuiper/mdpsqlexe",
-#            arguments=["test2"],
+            arguments=["raw_salesforce", "contact_tv", "hist_salesforce", "contact_hist"],
             name=f"stop_sqltest",
             task_id=f"nog_een_keer",
             retries=2,
