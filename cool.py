@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
+from airflow.operators.dummy import DummyOperator  # Correct import for Airflow 2.0 and later
 from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
