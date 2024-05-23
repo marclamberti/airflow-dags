@@ -25,8 +25,8 @@ dag = DAG('SalesforceLoad',
 
 contact = KubernetesPodOperator(
             image="antonkuiper/mdpsqlexe",
-            name=f"salesforce contact",
-            task_id=f"salesforce contact",
+            name=f"salesforce_contact",
+            task_id=f"salesforce_contact",
             arguments=["raw_salesforce", "contact_tv", "hist_salesforce", "contact_hist"],
             retries=2,
             retry_delay=timedelta(minutes=1),
