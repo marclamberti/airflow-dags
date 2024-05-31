@@ -21,6 +21,7 @@ default_args = {
     'retries': 7,
     'retry_delay': timedelta(minutes=5),
     'namespace': 'airflow-workload',
+    'image_pull_policy'='Always',
     'in_cluster': True,
     'get_logs': True,
     'is_delete_operator_pod': True
