@@ -9,3 +9,14 @@ TODO:   het maken van een script dat de Dag's gaat genereren opbasis van, de met
 
 We moeten nog verder uitzoeken en documenteren hoe de SYNC werkt
 We moeten nog verder uitzoeken om de sync te doen op basis van een "local  GIT repository"
+
+
+om te kijken of de sync correct is gegaan moeten we nog opzoek naar de 
+pod van airflow .  
+
+is het de scheduler?  
+helm-airflow-scheduler-8578b455c-mnqr4
+
+kubectl run -it helm-airflow-scheduler-8578b455c-mnqr4  
+
+kubectl exec -it helm-airflow-scheduler-8578b455c-mnqr4 -- /bin/sh
