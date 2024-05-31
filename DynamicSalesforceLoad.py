@@ -5,6 +5,8 @@ from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
+DIT FOUT
+
 def fetch_dag_data():
     # Replace 'your_conn_id' with your actual Airflow connection ID
     pg_hook = PostgresHook(postgres_conn_id='metadb')
