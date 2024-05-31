@@ -21,7 +21,6 @@ default_args = {
     'retries': 7,
     'retry_delay': timedelta(minutes=5),
     'namespace': 'airflow-workload',
-    'image_pull_policy'='Always',
     'in_cluster': True,
     'get_logs': True,
     'is_delete_operator_pod': True
@@ -48,6 +47,7 @@ for row in dag_data:
     
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe",
+        image_pull_policy='Always',
         name=task_id,
         task_id=task_id,
         arguments=[source_schema, source_view, target_schema, target_table],
