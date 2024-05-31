@@ -26,7 +26,7 @@ default_args = {
     'is_delete_operator_pod': True
 }
 
-dag = DAG('test',
+dag = DAG('DynamicSalesforceLoad',
           default_args=default_args,
           description='Dynamically generated Salesforce load DAG',
           schedule_interval='0 12 * * *',
