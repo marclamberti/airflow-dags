@@ -47,7 +47,7 @@ for row in dag_data:
     
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
-        image_pull_policy='Always',
+  #      image_pull_policy='Always',
         name=task_id,
         task_id=task_id,
         arguments=[source_schema, source_view, target_schema, target_table],
