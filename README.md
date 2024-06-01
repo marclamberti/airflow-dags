@@ -3,12 +3,12 @@
 dagantonpod.py   =>   deze werkt
 
 TODO:   Logging  verbeteren van de pods.
-TODO:   het maken van een script dat de Dag's gaat genereren opbasis van, de metadata uit de metadata database. 
-    >  Dit is dus een SYSTEEM DAG,  Deze hoeft maar één keer te worden gemaakt  en alleen bij wijzigingen moet die opnieuw worden gegenereert,  op basis van een API call  (eventueel) 
+TODO:  aanmaken van DAG voor het initialiseren van Applicatie,  run mdpcreate.py  uit de MDP  folder.
 
 
 We moeten nog verder uitzoeken en documenteren hoe de SYNC werkt
 We moeten nog verder uitzoeken om de sync te doen op basis van een "local  GIT repository"
+We kunnen ook in plaats van github  repo voor  de dags  gebruik maken van een s3 bucker sync.  
 
 
 om te kijken of de sync correct is gegaan moeten we nog opzoek naar de 
