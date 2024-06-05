@@ -10,7 +10,7 @@ def fetch_dag_data():
     pg_hook = PostgresHook(postgres_conn_id='metadb')
     conn = pg_hook.get_conn()
     cursor = conn.cursor()
-    cursor.execute("select  mdp_application  ||  '_raw' as source_schema, mdp_table || '_tv' as source_view , mdp_application ||  '_hist'   as target_schema, mdp_table || '_hist' as target_table from datacontract.mdp_table  where mdp_application= 'tpc'select  mdp_application  ||  '_raw' as source_schema, mdp_table || '_tv' as source_view , mdp_application ||  '_hist'   as target_schema, mdp_table || '_hist' as target_table from datacontract.mdp_table  where mdp_application= 'tpc'")
+    cursor.execute("  	select mdp_application  ||  '_raw' as source_schema, mdp_table || '_tv' as source_view , mdp_application ||  '_hist'   as target_schema, mdp_table || '_hist' as target_table from datacontract.mdp_table where mdp_application='tpc' ")
     rows = cursor.fetchall()
     return rows
 
