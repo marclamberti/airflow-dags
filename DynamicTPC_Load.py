@@ -1,9 +1,12 @@
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
-from airflow.operators.dummy import DummyOperator  # Correct import for Airflow 2.0 and later
+from airflow.operators.dummy import DummyOperator
 from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
+
+# Define the mdp_application value only once
+MDP_APPLICATION = 'tpc'  # Change this value as needed
 
 def get_query(mdp_application):
     query = f"""
@@ -17,11 +20,10 @@ def get_query(mdp_application):
     """
     return query
 
-def fetch_dag_data():
+def fetch_dag_data(mdp_application):
     pg_hook = PostgresHook(postgres_conn_id='metadb')
     conn = pg_hook.get_conn()
     cursor = conn.cursor()
-    mdp_application = 'tpc'  # Change this value as needed
     query = get_query(mdp_application)
     cursor.execute(query)
     rows = cursor.fetchall()
@@ -39,15 +41,16 @@ default_args = {
     'is_delete_operator_pod': True
 }
 
-dag = DAG('Dynamic_TPC_Load',
+# Use the mdp_application value in the DAG name
+dag = DAG(f'Dynamic_{MDP_APPLICATION}_Load',
           default_args=default_args,
-          description='Dynamically generated TPC load DAG',
+          description=f'Dynamically generated {MDP_APPLICATION} load DAG',
           schedule_interval='0 12 * * *',
           start_date=datetime(2024, 5, 22),
           catchup=False)
 
 # Fetch the data from the database
-dag_data = fetch_dag_data()
+dag_data = fetch_dag_data(MDP_APPLICATION)
 
 start_task = DummyOperator(
     task_id='start',
@@ -60,7 +63,7 @@ for row in dag_data:
     
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
-        image_pull_policy='Always',
+        image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
         arguments=[source_schema, source_view, target_schema, target_table],
