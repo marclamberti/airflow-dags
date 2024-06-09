@@ -5,12 +5,25 @@ from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
+def get_query(mdp_application):
+    query = f"""
+    SELECT 
+        mdp_application || '_raw' AS source_schema, 
+        mdp_table || '_tv' AS source_view, 
+        mdp_application || '_hist' AS target_schema, 
+        mdp_table || '_hist' AS target_table 
+    FROM datacontract.v_mdp_tables 
+    WHERE mdp_application='{mdp_application}'
+    """
+    return query
+
 def fetch_dag_data():
-    # Replace 'your_conn_id' with your actual Airflow connection ID
     pg_hook = PostgresHook(postgres_conn_id='metadb')
     conn = pg_hook.get_conn()
     cursor = conn.cursor()
-    cursor.execute("  	select mdp_application  ||  '_raw' as source_schema, mdp_table || '_tv' as source_view , mdp_application ||  '_hist'   as target_schema, mdp_table || '_hist' as target_table from datacontract.v_mdp_tables where mdp_application='tpc' ")
+    mdp_application = 'tpc'  # Change this value as needed
+    query = get_query(mdp_application)
+    cursor.execute(query)
     rows = cursor.fetchall()
     return rows
 
