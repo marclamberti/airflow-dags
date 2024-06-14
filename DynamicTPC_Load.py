@@ -38,9 +38,7 @@ default_args = {
     'namespace': 'airflow-workload',
     'in_cluster': True,
     'get_logs': True,
-    'is_delete_operator_pod': True,
-    'max_active_tasks' : 3,
-    'concurrency' : 2
+    'is_delete_operator_pod': True
 }
 
 # Use the mdp_application value in the DAG name
@@ -49,7 +47,7 @@ dag = DAG(f'Dynamic_{MDP_APPLICATION}_Load',
           description=f'Dynamically generated {MDP_APPLICATION} load DAG',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=2,
+          concurrency=4,
           catchup=False)
 
 # Fetch the data from the database
