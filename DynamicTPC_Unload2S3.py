@@ -39,6 +39,8 @@ default_args = {
     'in_cluster': True,
     'get_logs': True,
     'is_delete_operator_pod': True
+    'max_active_tasks' : 3
+    'concurrency' : 2
 }
 
 # Use the mdp_application value in the DAG name
