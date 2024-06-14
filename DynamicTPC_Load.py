@@ -45,7 +45,7 @@ default_args = {
 dag = DAG(f'Dynamic_{MDP_APPLICATION}_Load',
           default_args=default_args,
           description=f'Dynamically generated {MDP_APPLICATION} load DAG',
-          schedule_interval='0 12 * * *',
+          schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
           catchup=False)
 
