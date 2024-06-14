@@ -47,7 +47,7 @@ dag = DAG(f'Dynamic_{MDP_APPLICATION}_Unload2s3',
           description=f'Dynamically generated {MDP_APPLICATION} unload 2 s3 DAG',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=4,
+          concurrency=7,
           catchup=False)
 
 # Fetch the data from the database
