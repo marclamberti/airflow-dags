@@ -38,8 +38,8 @@ default_args = {
     'namespace': 'airflow-workload',
     'in_cluster': True,
     'get_logs': True,
-    'is_delete_operator_pod': True
-    'max_active_tasks' : 3
+    'is_delete_operator_pod': True,
+    'max_active_tasks' : 3,
     'concurrency' : 2
 }
 
