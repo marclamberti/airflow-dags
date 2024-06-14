@@ -66,7 +66,7 @@ for row in dag_data:
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=[source_schema, source_view, target_schema, target_table],
+        arguments=["sqlexe.py", source_schema, source_view, target_schema, target_table],
         retries=2,
         retry_delay=timedelta(minutes=1),
         dag=dag,
