@@ -28,17 +28,6 @@ def fetch_dag_data(mdp_application):
     rows = cursor.fetchall()
     return rows
 
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'start_date': datetime(2024, 5, 22),
-    'retries': 7,
-    'retry_delay': timedelta(minutes=5),
-    'namespace': 'airflow-workload',
-    'in_cluster': True,
-    'get_logs': True,
-    'is_delete_operator_pod': True,
-}
 
 # Use the mdp_application value in the DAG name
 dag = DAG(f'Dynamic_{MDP_APPLICATION}_Unload2s3',
@@ -47,6 +36,14 @@ dag = DAG(f'Dynamic_{MDP_APPLICATION}_Unload2s3',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
           concurrency=7,
+          owner= 'airflow',
+          depends_on_past =  False,
+          retries= 7,
+          retry_delay = timedelta(minutes: 5),
+          namespace=  'airflow-workload',
+          in_cluster= True,
+          get_logs= True,
+          is_delete_operator_pod= True,
           catchup=False)
 
 # Fetch the data from the database
