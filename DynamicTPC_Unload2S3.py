@@ -13,7 +13,7 @@ def get_query(mdp_application):
     SELECT 
         mdp_application || '' AS source_schema, 
         mdp_table || '' AS source_view, 
-        mdp_application || '_s3' AS target_schema, 
+        '' AS target_schema, 
         mdp_table || '' AS target_table 
     FROM datacontract.v_mdp_tables 
     WHERE mdp_application='{mdp_application}'
