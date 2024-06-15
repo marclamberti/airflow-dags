@@ -13,7 +13,6 @@ def get_query(mdp_application):
     SELECT 
         mdp_application || '' AS source_schema, 
         mdp_table || '' AS source_view, 
-        '' AS target_schema, 
         mdp_table || '' AS target_table 
     FROM datacontract.v_mdp_tables 
     WHERE mdp_application='{mdp_application}'
@@ -59,15 +58,15 @@ start_task = DummyOperator(
 )
 
 for row in dag_data:
-    source_schema, source_view, target_schema, target_table = row
-    task_id = f"{target_schema}_{target_table}"
+    source_schema, source_view, target_table = row
+    task_id = f"{target_table}"
     
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["2s3.py", source_schema, source_view, target_schema, target_table, "minios3" ],
+        arguments=["2s3.py", source_schema, source_view, target_table ],
         retries=2,
         retry_delay=timedelta(minutes=1),
         dag=dag,
