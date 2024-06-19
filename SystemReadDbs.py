@@ -38,7 +38,7 @@ start_task = DummyOperator(
     task_id='start',
     dag=dag
 )
-dag_dag= [1]
+dag_data= [1]
 
 for row in dag_data:
     
