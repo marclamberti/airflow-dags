@@ -8,9 +8,6 @@ from kubernetes.client import models as k8s
 # Define the mdp_application value only once
 MDP_APPLICATION = 'dbschema/tpc.dbs'  # Change this value as needed
 
-
-
-
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
@@ -33,16 +30,14 @@ dag = DAG(f'MDP_System_{MDP_APPLICATION}_DbSchema_tpc',
           catchup=False)
 
 # Fetch the data from the database
-dag_data = fetch_dag_data(MDP_APPLICATION)
 
 start_task = DummyOperator(
     task_id='start',
     dag=dag
 )
+dag_dag= [1]
 
 for row in dag_data:
-    source_schema, source_view, target_table = row
-    task_id = f"{target_table}"
     
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
