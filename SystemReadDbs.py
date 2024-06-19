@@ -6,26 +6,10 @@ from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
-MDP_APPLICATION = 'tpc'  # Change this value as needed
+MDP_APPLICATION = 'dbschema/tpc.dbs'  # Change this value as needed
 
-def get_query(mdp_application):
-    query = f"""
-    SELECT 
-        mdp_application || '' AS source_schema, 
-        mdp_table || '' AS target_table 
-    FROM datacontract.v_mdp_tables 
-    WHERE mdp_application='{mdp_application}'
-    """
-    return query
 
-def fetch_dag_data(mdp_application):
-    pg_hook = PostgresHook(postgres_conn_id='metadb')
-    conn = pg_hook.get_conn()
-    cursor = conn.cursor()
-    query = get_query(mdp_application)
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    return rows
+
 
 default_args = {
     'owner': 'airflow',
@@ -40,12 +24,12 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'Dynamic_{MDP_APPLICATION}_Bucket2Raw',
+dag = DAG(f'MDP_System_{MDP_APPLICATION}_DbSchema_tpc',
           default_args=default_args,
-          description=f'Dynamically generated {MDP_APPLICATION} load from bucket to Raw DAG',
+          description=f'mdp system load dbschema {MDP_APPLICATION} from s3',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=2,
+          concurrency=1,
           catchup=False)
 
 # Fetch the data from the database
@@ -57,7 +41,7 @@ start_task = DummyOperator(
 )
 
 for row in dag_data:
-    source_schema, target_table = row
+    source_schema, source_view, target_table = row
     task_id = f"{target_table}"
     
     task = KubernetesPodOperator(
@@ -65,7 +49,7 @@ for row in dag_data:
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["mdpBucket2Raw.py", source_schema, target_table ],
+        arguments=["mdpReadDbs.py", MDP_APPLICATION ],
         retries=2,
         retry_delay=timedelta(minutes=1),
         dag=dag,
