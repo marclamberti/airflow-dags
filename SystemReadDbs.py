@@ -41,7 +41,7 @@ start_task = DummyOperator(
 dag_data= [1]
 
 for row in dag_data:
-    
+    task_id = 'ReadDatamodel'+MDP_APPLICATION
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',  # Ensures the latest image is always pulled
