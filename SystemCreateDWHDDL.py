@@ -1,0 +1,56 @@
+from airflow import DAG
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
+from airflow.operators.dummy import DummyOperator
+from airflow.hooks.postgres_hook import PostgresHook
+from datetime import datetime, timedelta
+from kubernetes.client import models as k8s
+
+# Define the mdp_application value only once
+MDP_APPLICATION = 'tpc.dbs'  # Change this value as needed
+MDP_Path = 'dbschema/'
+mdp_path_app = MDP_Path + MDP_APPLICATION
+
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2024, 5, 22),
+    'retries': 7,
+    'retry_delay': timedelta(minutes=5),
+    'namespace': 'airflow-workload',
+    'in_cluster': True,
+    'get_logs': True,
+    'is_delete_operator_pod': True,
+}
+
+# Use the mdp_application value in the DAG name
+dag = DAG(f'MDP_System_{MDP_APPLICATION}_Create_DWH_DDL_Plus_Layers',
+          default_args=default_args,
+          description=f'mdp system create layers for application {MDP_APPLICATION} ',
+          schedule_interval='0 12 * 1 *',
+          start_date=datetime(2024, 5, 22),
+          concurrency=1,
+          catchup=False)
+
+# Fetch the data from the database
+
+start_task = DummyOperator(
+    task_id='start',
+    dag=dag
+)
+dag_data= [1]
+
+for row in dag_data:
+    task_id = 'CreateDWHDDL'+MDP_APPLICATION
+    task = KubernetesPodOperator(
+        image="antonkuiper/mdpsqlexe:latest",
+        image_pull_policy='Always',  # Ensures the latest image is always pulled
+        name=task_id,
+        task_id=task_id,
+        arguments=["mdpcreate.py", mdp_path_app ],
+        retries=2,
+        retry_delay=timedelta(minutes=1),
+        dag=dag,
+    )
+    
+    start_task >> task
