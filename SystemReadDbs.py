@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
-MDP_APPLICATION = 'dbschema/tpc.dbs'  # Change this value as needed
-
+MDP_APPLICATION = 'tpc.dbs'  # Change this value as needed
+MDP_Path = 'dbschema/'
+mdp_path_app = MDP_Path || MDP_APPLICATION
 
 
 default_args = {
@@ -46,7 +47,7 @@ for row in dag_data:
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["mdpReadDbs.py", MDP_APPLICATION ],
+        arguments=["mdpReadDbs.py", mdp_path_app ],
         retries=2,
         retry_delay=timedelta(minutes=1),
         dag=dag,
