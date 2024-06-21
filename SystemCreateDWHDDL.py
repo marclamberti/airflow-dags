@@ -48,7 +48,7 @@ for row in dag_data:
         name=task_id,
         task_id=task_id,
         arguments=["mdpcreate.py", mdp_path_app ],
-        retries=2,
+        retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
     )

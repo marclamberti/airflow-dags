@@ -66,7 +66,7 @@ for row in dag_data:
         name=task_id,
         task_id=task_id,
         arguments=["mdpBucket2Raw.py", source_schema, target_table ],
-        retries=2,
+        retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
     )
