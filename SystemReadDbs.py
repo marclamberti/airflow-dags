@@ -47,7 +47,7 @@ for row in dag_data:
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["mdpReadDbs.py", mdp_path_app ],
+        arguments=["mdpreaddbs.py", mdp_path_app ],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
