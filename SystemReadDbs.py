@@ -6,9 +6,8 @@ from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
-MDP_APPLICATION = 'tpc.dbs'  # Change this value as needed
-MDP_Path = ''
-mdp_path_app = MDP_Path + MDP_APPLICATION
+MDP_APPLICATION = 'tpc'  # Change this value as needed
+
 
 
 default_args = {
@@ -41,13 +40,13 @@ start_task = DummyOperator(
 dag_data= [1]
 
 for row in dag_data:
-    task_id = 'ReadDatamodel'+MDP_APPLICATION
+    task_id = 'ReadDatamodel'+ MDP_APPLICATION
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["mdpreaddbs.py", mdp_path_app ],
+        arguments=["mdpreaddbs.py", MDP_APPLICATION ],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
