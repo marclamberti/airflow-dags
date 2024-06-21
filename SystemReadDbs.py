@@ -7,7 +7,7 @@ from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
 MDP_APPLICATION = 'tpc.dbs'  # Change this value as needed
-MDP_Path = 'dbschema/'
+MDP_Path = ''
 mdp_path_app = MDP_Path + MDP_APPLICATION
 
 
