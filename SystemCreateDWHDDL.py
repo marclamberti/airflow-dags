@@ -40,13 +40,13 @@ start_task = DummyOperator(
 dag_data= [1]
 
 for row in dag_data:
-    task_id = 'CreateDWHDDL'+MDP_APPLICATION
+    task_id = 'CreateDWHDDL'+ MDP_APPLICATION
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["mdpcreate.py", mdp_path_app ],
+        arguments=["mdpcreate.py", MDP_APPLICATION ],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
