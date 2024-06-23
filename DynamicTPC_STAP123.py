@@ -13,6 +13,7 @@ MDP_SCHEMA = 'public'
 def get_query(mdp_application):
     query = f"""
     SELECT 
+		mdp_table AS table_name, 
         mdp_application || '_raw' AS source_schema, 
         mdp_table || '_tv' AS source_view, 
         mdp_application || '_hist' AS target_schema, 
@@ -61,7 +62,7 @@ start_task = DummyOperator(
 )
 
 for row in dag_data:
-    source_schema, source_view, target_schema, target_table = row
+    table_name, source_schema, source_view, target_schema, target_table = row
     
     # Unload to S3 Task
     unload_task_id = f"unload_{target_table}"
@@ -70,7 +71,7 @@ for row in dag_data:
         image_pull_policy='Always',
         name=unload_task_id,
         task_id=unload_task_id,
-        arguments=["mdpunload2s3.py", MDP_APPLICATION, MDP_SCHEMA, target_table],
+        arguments=["mdpunload2s3.py", MDP_APPLICATION, MDP_SCHEMA, table_name],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
@@ -83,7 +84,7 @@ for row in dag_data:
         image_pull_policy='Always',
         name=load_raw_task_id,
         task_id=load_raw_task_id,
-        arguments=["mdpBucket2Raw.py", source_schema, target_table],
+        arguments=["mdpBucket2Raw.py", source_schema, table_name],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
