@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
+# Dit zou cool zijn als deze nu eens te voorschijnt komt
 MDP_APPLICATION = 'tpc'  # Change this value as needed
 MDP_SCHEMA = 'public'
 
