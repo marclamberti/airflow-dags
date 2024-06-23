@@ -59,7 +59,7 @@ start_task = DummyOperator(
 
 for row in dag_data:
     source_application, table_name = row
-    task_id = f"{target_table}"
+    task_id = f"{table_name}"
     
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
