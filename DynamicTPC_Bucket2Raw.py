@@ -45,7 +45,7 @@ dag = DAG(f'Dynamic_{MDP_APPLICATION}_Bucket2Raw',
           description=f'Dynamically generated {MDP_APPLICATION} load from bucket to Raw DAG',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=5,
+          concurrency=11,
           catchup=False)
 
 # Fetch the data from the database
