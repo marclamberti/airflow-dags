@@ -7,13 +7,13 @@ from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
 MDP_APPLICATION = 'tpc'  # Change this value as needed
+MDP_SCHEMA = 'public'
 
 def get_query(mdp_application):
     query = f"""
     SELECT 
-        mdp_application || '' AS source_schema, 
-        mdp_table || '' AS source_view, 
-        mdp_table || '' AS target_table 
+        mdp_application || '' AS source_application, 
+        mdp_table || '' AS table_name 
     FROM datacontract.v_mdp_tables 
     WHERE mdp_application='{mdp_application}'
     """
@@ -58,7 +58,7 @@ start_task = DummyOperator(
 )
 
 for row in dag_data:
-    source_schema, source_view, target_table = row
+    source_application, table_name = row
     task_id = f"{target_table}"
     
     task = KubernetesPodOperator(
@@ -66,7 +66,7 @@ for row in dag_data:
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["2s3.py", source_schema, source_view, target_table ],
+        arguments=["mdpunload2s3.py", source_application, MDP_SCHEMA, table_name],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
