@@ -84,7 +84,7 @@ for row in dag_data:
         image_pull_policy='Always',
         name=load_raw_task_id,
         task_id=load_raw_task_id,
-        arguments=["mdpBucket2Raw.py", source_schema, table_name],
+        arguments=["mdpBucket2Raw.py", MDP_APPLICATION, table_name],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,
