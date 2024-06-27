@@ -6,28 +6,9 @@ from datetime import datetime, timedelta
 from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
-# Dit zou cool zijn
 MDP_APPLICATION = 'tpc'  # Change this value as needed
-MDP_SCHEMA = 'public'
 
-def get_query(mdp_application):
-    query = f"""
-    SELECT 
-        mdp_application || '' AS source_application, 
-        mdp_table || '' AS table_name 
-    FROM datacontract.v_mdp_tables 
-    WHERE mdp_application='{mdp_application}'
-    """
-    return query
 
-def fetch_dag_data(mdp_application):
-    pg_hook = PostgresHook(postgres_conn_id='metadb')
-    conn = pg_hook.get_conn()
-    cursor = conn.cursor()
-    query = get_query(mdp_application)
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    return rows
 
 default_args = {
     'owner': 'airflow',
@@ -42,32 +23,30 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'Dynamic_{MDP_APPLICATION}_Unload2s3',
+dag = DAG(f'MDP_System_{MDP_APPLICATION}_Create_DWH_DDL_Plus_Layers',
           default_args=default_args,
-          description=f'Dynamically generated {MDP_APPLICATION} unload 2 s3 DAG',
+          description=f'mdp system create layers for application {MDP_APPLICATION} ',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=8,
+          concurrency=1,
           catchup=False)
 
 # Fetch the data from the database
-dag_data = fetch_dag_data(MDP_APPLICATION)
 
 start_task = DummyOperator(
     task_id='start',
     dag=dag
 )
+dag_data= [1]
 
 for row in dag_data:
-    source_application, table_name = row
-    task_id = f"{table_name}"
-    
+    task_id = 'Stap0b_setup_datawarehouse_ddl_'+ MDP_APPLICATION
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',  # Ensures the latest image is always pulled
         name=task_id,
         task_id=task_id,
-        arguments=["mdpunload2s3.py", source_application, MDP_SCHEMA, table_name],
+        arguments=["mdpcreate.py", MDP_APPLICATION ],
         retries=0,
         retry_delay=timedelta(minutes=1),
         dag=dag,

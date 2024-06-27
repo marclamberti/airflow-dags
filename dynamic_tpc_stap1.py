@@ -7,6 +7,7 @@ from kubernetes.client import models as k8s
 
 # Define the mdp_application value only once
 MDP_APPLICATION = 'tpc'  # Change this value as needed
+p_concurrency=8   # parameter for concurrency
 
 def get_query(mdp_application):
     query = f"""
@@ -40,12 +41,12 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'Dynamic_{MDP_APPLICATION}_Bucket2Raw',
+dag = DAG(f'Dynamic_{MDP_APPLICATION}_stap1_extract_source_to_bucket',
           default_args=default_args,
-          description=f'Dynamically generated {MDP_APPLICATION} load from bucket to Raw DAG',
+          description=f'Dynamically generated {MDP_APPLICATION} extract to from source to bucket',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=8,
+          concurrency=p_concurrency,
           catchup=False)
 
 # Fetch the data from the database

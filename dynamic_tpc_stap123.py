@@ -9,6 +9,7 @@ from kubernetes.client import models as k8s
 # Dit zou cool zijn als deze nu eens te voorschijnt komt
 MDP_APPLICATION = 'tpc'  # Change this value as needed
 MDP_SCHEMA = 'public'
+p_concurrency=8   # parameter for concurrency
 
 def get_query(mdp_application):
     query = f"""
@@ -45,12 +46,12 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'Dynamic_{MDP_APPLICATION}_Pipeline',
+dag = DAG(f'Dynamic_{MDP_APPLICATION}_stap123_load_dwh_from_source',
           default_args=default_args,
           description=f'Dynamically generated {MDP_APPLICATION} pipeline DAG',
           schedule_interval='0 12 * 1 *',
           start_date=datetime(2024, 5, 22),
-          concurrency=8,
+          concurrency=p_concurrency,
           catchup=False)
 
 # Fetch the data from the database
@@ -65,8 +66,8 @@ for row in dag_data:
     table_name, source_schema, source_view, target_schema, target_table = row
     
     # Unload to S3 Task
-    unload_task_id = f"unload_{target_table}"
-    unload_task = KubernetesPodOperator(
+    unload_task_id = f"stap1_load_bucket_{target_table}"
+    stap1_unload_task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',
         name=unload_task_id,
@@ -78,8 +79,8 @@ for row in dag_data:
     )
     
     # Load from S3 into Raw Task
-    load_raw_task_id = f"load_raw_{target_table}"
-    load_raw_task = KubernetesPodOperator(
+    load_raw_task_id = f"stap2_load_raw_{target_table}"
+    stap2_load_raw_task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',
         name=load_raw_task_id,
@@ -91,8 +92,8 @@ for row in dag_data:
     )
     
     # Load from Raw into Hist Task
-    load_hist_task_id = f"load_hist_{target_table}"
-    load_hist_task = KubernetesPodOperator(
+    load_hist_task_id = f"stap3_load_hist_{target_table}"
+    stap3_load_hist_task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',
         name=load_hist_task_id,
@@ -103,4 +104,4 @@ for row in dag_data:
         dag=dag,
     )
     
-    start_task >> unload_task >> load_raw_task >> load_hist_task
+    start_task >> stap1_unload_task >> stap2_load_raw_task >> stap3_load_hist_task
