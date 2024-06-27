@@ -23,7 +23,7 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'Stap0a_setup_data_in_meta_store_{MDP_APPLICATION}',
+dag = DAG(f'Dynamic_{MDP_APPLICATION}_Stap0a_setup_data_in_meta_store',
           default_args=default_args,
           description=f'mdp system load dbschema {MDP_APPLICATION} from s3',
           schedule_interval='0 12 * 1 *',

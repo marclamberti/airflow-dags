@@ -23,7 +23,7 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'Stap0b_{MDP_APPLICATION}_setup_datawarehouse_layers',
+dag = DAG(f'Dynamic_{MDP_APPLICATION}_Stap0b_setup_datawarehouse_layers',
           default_args=default_args,
           description=f'mdp system create layers for application {MDP_APPLICATION} ',
           schedule_interval='0 12 * 1 *',
