@@ -1,6 +1,7 @@
 # airflow-dags
 
-dagantonpod.py   =>   deze werkt
+
+DAP
 
 TODO:   Logging  verbeteren van de pods.
 TODO:  aanmaken van DAG voor het initialiseren van Applicatie,  run mdpcreate.py  uit de MDP  folder.
