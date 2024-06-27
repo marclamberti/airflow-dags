@@ -66,7 +66,7 @@ for row in dag_data:
     table_name, source_schema, source_view, target_schema, target_table = row
     
     # Unload to S3 Task
-    unload_task_id = f"stap1_load_bucket_{target_table}"
+    unload_task_id = f"stap1_load_bucket_{table_name}"
     stap1_unload_task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',
@@ -79,7 +79,7 @@ for row in dag_data:
     )
     
     # Load from S3 into Raw Task
-    load_raw_task_id = f"stap2_load_raw_{target_table}"
+    load_raw_task_id = f"stap2_load_raw_{table_name}"
     stap2_load_raw_task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',
@@ -92,7 +92,7 @@ for row in dag_data:
     )
     
     # Load from Raw into Hist Task
-    load_hist_task_id = f"stap3_load_hist_{target_table}"
+    load_hist_task_id = f"stap3_load_hist_{table_name}"
     stap3_load_hist_task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',
