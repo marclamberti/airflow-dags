@@ -9,7 +9,7 @@ from kubernetes.client import models as k8s
 # Dit zou cool zijn als deze nu eens te voorschijnt komt
 MDP_APPLICATION = 'tpc'  # Change this value as needed
 MDP_SCHEMA = 'public'
-p_concurrency=14   # parameter for concurrency
+p_concurrency=8   # parameter for concurrency
 
 def get_query(mdp_application):
     query = f"""
