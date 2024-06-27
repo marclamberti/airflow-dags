@@ -23,7 +23,7 @@ default_args = {
 }
 
 # Use the mdp_application value in the DAG name
-dag = DAG(f'MDP_System_{MDP_APPLICATION}_Create_DWH_DDL_Plus_Layers',
+dag = DAG(f'Stap0b_{MDP_APPLICATION}_setup_datawarehouse_layers',
           default_args=default_args,
           description=f'mdp system create layers for application {MDP_APPLICATION} ',
           schedule_interval='0 12 * 1 *',
@@ -40,7 +40,7 @@ start_task = DummyOperator(
 dag_data= [1]
 
 for row in dag_data:
-    task_id = 'Stap0b_setup_datawarehouse_ddl_'+ MDP_APPLICATION
+    task_id = 'Stap0b_setup_datawarehouse_layers_'+ MDP_APPLICATION
     task = KubernetesPodOperator(
         image="antonkuiper/mdpsqlexe:latest",
         image_pull_policy='Always',  # Ensures the latest image is always pulled
