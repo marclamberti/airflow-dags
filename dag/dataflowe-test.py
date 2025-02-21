@@ -48,4 +48,4 @@ dbtrunner = KubernetesPodOperator(
     dag=dag,
 )
 
-    start_task >> dbtrunner
+start_task >> dbtrunner
